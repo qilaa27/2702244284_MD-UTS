@@ -16,19 +16,18 @@ with open("robust_scaler.pkl", "rb") as f:
 with open("columns.pkl", "rb") as f:
     columns = pickle.load(f)
 
-# Inisialisasi predictor
 predictor = BookingPredictor(
-    model_path=None,  # Tidak digunakan karena kita inject model langsung
+    model_path=None,
     standard_scaler_path=None,
     robust_scaler_path=None,
     columns_path=None
 )
+
 predictor.model = model
 predictor.standard_scaler = standard_scaler
 predictor.robust_scaler = robust_scaler
 predictor.columns = columns
 
-# Test case
 test_case_1 = {
     "Booking_ID": "INN00001",
     "no_of_adults": 2,
