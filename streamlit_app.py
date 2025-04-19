@@ -1,5 +1,89 @@
 import streamlit as st
+import pandas as pd
+import pickle
+import gzip
+from predictor import BookingPredictor
 
-st.title('🎈 App Name')
+st.title("Hotel Booking Cancellation Predictor")
 
-st.write('Hello world!')
+# Load model dan scaler dari file .pkl.gz
+with gzip.open("best_rf_model.pkl.gz", "rb") as f:
+    model = pickle.load(f)
+with open("standard_scaler.pkl", "rb") as f:
+    standard_scaler = pickle.load(f)
+with open("robust_scaler.pkl", "rb") as f:
+    robust_scaler = pickle.load(f)
+with open("columns.pkl", "rb") as f:
+    columns = pickle.load(f)
+
+# Inisialisasi predictor
+predictor = BookingPredictor(
+    model_path=None,  # Tidak digunakan karena kita inject model langsung
+    standard_scaler_path=None,
+    robust_scaler_path=None,
+    columns_path=None
+)
+predictor.model = model
+predictor.standard_scaler = standard_scaler
+predictor.robust_scaler = robust_scaler
+predictor.columns = columns
+
+# Test case
+test_case_1 = {
+    "Booking_ID": "TC001",
+    "no_of_adults": 2,
+    "no_of_children": 0,
+    "no_of_weekend_nights": 1,
+    "no_of_week_nights": 2,
+    "type_of_meal_plan": "Meal Plan 1",
+    "required_car_parking_space": 0,
+    "room_type_reserved": "Room_Type 1",
+    "lead_time": 100,
+    "arrival_year": 2018,
+    "arrival_month": 10,
+    "arrival_date": 5,
+    "market_segment_type": "Online",
+    "repeated_guest": 0,
+    "no_of_previous_cancellations": 0,
+    "no_of_previous_bookings_not_canceled": 0,
+    "avg_price_per_room": 75.0,
+    "no_of_special_requests": 1
+}
+
+test_case_2 = {
+    "Booking_ID": "TC002",
+    "no_of_adults": 1,
+    "no_of_children": 1,
+    "no_of_weekend_nights": 2,
+    "no_of_week_nights": 3,
+    "type_of_meal_plan": "Meal Plan 2",
+    "required_car_parking_space": 1,
+    "room_type_reserved": "Room_Type 4",
+    "lead_time": 50,
+    "arrival_year": 2018,
+    "arrival_month": 8,
+    "arrival_date": 22,
+    "market_segment_type": "Offline",
+    "repeated_guest": 1,
+    "no_of_previous_cancellations": 0,
+    "no_of_previous_bookings_not_canceled": 2,
+    "avg_price_per_room": 120.5,
+    "no_of_special_requests": 0
+}
+
+test_options = {
+    "Test Case 1": test_case_1,
+    "Test Case 2": test_case_2
+}
+
+option = st.selectbox("Pilih Test Case", list(test_options.keys()))
+selected_data = test_options[option]
+
+st.write("### Data yang digunakan:")
+st.dataframe(pd.DataFrame([selected_data]))
+
+if st.button("Predict"):
+    input_df = pd.DataFrame([selected_data])
+    prediction = predictor.predict(input_df)
+    result = "Canceled" if prediction[0] == 1 else "Not Canceled"
+    st.success(f"Hasil Prediksi: {result}")
