@@ -4,7 +4,7 @@ import pickle
 import gzip
 from predictor import BookingPredictor
 
-st.title("Hotel Booking Cancellation Predictor")
+st.title("Hotel Reservation Status Classifier 🏨")
 
 # Load model dan scaler dari file .pkl.gz
 with gzip.open("best_rf_model.pkl.gz", "rb") as f:
