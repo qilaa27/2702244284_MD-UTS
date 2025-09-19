@@ -1,20 +1,15 @@
-# Dataset B Hotel
+# Hotel Reservation Status Classifier
 
-## Demo App
+This project aims to build and deploy a machine learning model to **predict hotel reservation status**—whether a booking will be *Canceled* or *Not Canceled*—based on the available reservation data.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://app-starter-kit.streamlit.app/)
+The model was developed through a complete pipeline of **data preprocessing**, training with a comparison of **Random Forest** and **XGBoost** algorithms, selecting the best-performing model, and saving it using **pickle**.  
+A web application was then built with **Streamlit** to allow users to test reservation details interactively.
 
-## GitHub Codespaces
+**Input:** reservation details such as number of adults/children, length of stay, meal plan, room price, and other parameters from the CSV file.  
+**Output:** predicted reservation status:
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/app-starter-kit?quickstart=1)
+- **Test Case 1 → Not Canceled**  
+  ![Test Case 1](Test%20Case%201.png)
 
-## Section Heading
-
-This is filler text, please replace this with text for this section.
-
-## Further Reading
-
-This is filler text, please replace this with a explanatory text about further relevant resources for this repo
-- Resource 1
-- Resource 2
-- Resource 3
+- **Test Case 2 → Canceled**  
+  ![Test Case 2](Test%20Case%202.png)
